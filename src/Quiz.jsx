@@ -124,7 +124,7 @@ function Quiz() {
   if (!hasStarted) {
     return (
       <div className="app-container start-screen">
-        <h1 className="title-logo">Quiz: Seu Perfil Profissional</h1>
+        <h1 className="title-logo">Quiz: Qual é o seu potencial, MARKETIRO?</h1>
         <p className="subtitle">Descubra como você interage com boas experiências e com sua equipe!</p>
         
         <div className="input-container">
