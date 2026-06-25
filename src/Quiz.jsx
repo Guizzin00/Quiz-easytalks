@@ -160,29 +160,9 @@ function Quiz() {
         </div>
         
         {alreadyPlayed && !isSaving && (
-          <div style={{ marginTop: '2rem' }}>
-            <p style={{ opacity: 0.8, fontSize: '1.2rem', fontWeight: 700 }}>
-              Você já completou o quiz. Seus resultados foram salvos!
-            </p>
-            {/* Botão temporário para ajudar você nos testes: */}
-            <button 
-              onClick={() => {
-                localStorage.clear();
-                window.location.reload();
-              }}
-              style={{
-                marginTop: '1rem',
-                background: 'transparent',
-                border: '1px solid white',
-                color: 'white',
-                padding: '0.5rem 1rem',
-                borderRadius: '8px',
-                cursor: 'pointer'
-              }}
-            >
-              🛠️ Limpar Bloqueio (Modo Teste)
-            </button>
-          </div>
+          <p style={{ marginTop: '2rem', opacity: 0.8, fontSize: '1.2rem', fontWeight: 700 }}>
+            Você já completou o quiz. Seus resultados foram salvos!
+          </p>
         )}
       </div>
     );
