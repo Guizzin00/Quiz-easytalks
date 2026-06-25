@@ -22,28 +22,41 @@ function Quiz() {
   const checkIfCanPlay = async () => {
     const savedScore = localStorage.getItem('quiz_score');
     const savedName = localStorage.getItem('quiz_name');
+    const savedId = localStorage.getItem('quiz_id');
     
-    if (savedScore !== null && savedName !== null) {
+    // Se existe pontuação salva, vamos checar no banco se o Admin excluiu
+    if (savedScore !== null) {
       try {
-        const { data, error } = await supabase
-          .from('quiz_results')
-          .select('id')
-          .eq('name', savedName)
-          .limit(1);
-          
-        if (error) throw error;
+        let query = supabase.from('quiz_results').select('id');
         
-        // Se retornar vazio, o admin excluiu
-        if (data && data.length === 0) {
-          localStorage.removeItem('quiz_score');
-          localStorage.removeItem('quiz_name');
-          setCheckingStatus(false);
-          return;
+        if (savedId) {
+          query = query.eq('id', savedId);
+        } else if (savedName) {
+          query = query.eq('name', savedName);
+        } else {
+          // Se não tiver nome nem ID (jogado na versão antiga), não temos como checar o banco.
+          // Libera logo o cara por garantia ou mantém bloqueado? Vamos manter, mas é raro.
+        }
+
+        if (savedId || savedName) {
+          const { data, error } = await query.limit(1);
+            
+          if (error) throw error;
+          
+          // Se retornar vazio, significa que o Admin excluiu do painel!
+          if (data && data.length === 0) {
+            localStorage.removeItem('quiz_score');
+            localStorage.removeItem('quiz_name');
+            localStorage.removeItem('quiz_id');
+            setCheckingStatus(false);
+            return;
+          }
         }
       } catch (err) {
-        console.error("Erro ao verificar status:", err);
+        console.error("Erro ao verificar status no banco:", err);
       }
 
+      // Se passou por tudo e não foi excluído (ou deu erro de rede), bloqueia
       setFinalScore(parseInt(savedScore, 10));
       setShowResult(true);
       setHasStarted(true);
@@ -80,9 +93,17 @@ function Quiz() {
   const saveResult = async (scoreToSave) => {
     setIsSaving(true);
     try {
-      await supabase
+      // O .select() faz o supabase retornar a linha criada, com o ID exato!
+      const { data, error } = await supabase
         .from('quiz_results')
-        .insert([{ name: playerName, score: scoreToSave }]);
+        .insert([{ name: playerName, score: scoreToSave }])
+        .select();
+        
+      if (error) throw error;
+
+      if (data && data.length > 0) {
+        localStorage.setItem('quiz_id', data[0].id);
+      }
     } catch (error) {
       console.error("Erro ao salvar resultado:", error);
     } finally {
@@ -101,7 +122,7 @@ function Quiz() {
   if (!hasStarted) {
     return (
       <div className="app-container start-screen">
-        <h1 className="title-logo">Quiz: Qual é o seu potencial MARKETEIRO?</h1>
+        <h1 className="title-logo">Quiz: Seu Perfil Profissional</h1>
         <p className="subtitle">Descubra como você interage com boas experiências e com sua equipe!</p>
         
         <div className="input-container">
