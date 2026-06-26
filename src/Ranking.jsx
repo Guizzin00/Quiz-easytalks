@@ -19,7 +19,10 @@ function Ranking() {
         .order('created_at', { ascending: false });
         
       if (error) throw error;
-      setResults(data || []);
+      
+      // Filtra localmente para não quebrar caso a coluna 'hidden' ainda não exista no Supabase
+      const visibleResults = (data || []).filter(item => item.hidden !== true);
+      setResults(visibleResults);
     } catch (error) {
       console.error("Erro ao buscar resultados:", error);
     } finally {

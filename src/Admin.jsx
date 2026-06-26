@@ -49,6 +49,23 @@ function Admin() {
     }
   };
 
+  const handleToggleHide = async (id, currentHiddenStatus) => {
+    const newStatus = !currentHiddenStatus;
+    try {
+      const { error } = await supabase
+        .from('quiz_results')
+        .update({ hidden: newStatus })
+        .eq('id', id);
+        
+      if (error) throw error;
+      
+      setResults(results.map(item => item.id === id ? { ...item, hidden: newStatus } : item));
+    } catch (error) {
+      console.error("Erro ao atualizar status:", error);
+      alert("Erro ao ocultar. Certifique-se de ter adicionado uma coluna 'hidden' (boolean) na sua tabela 'quiz_results' no Supabase.");
+    }
+  };
+
   return (
     <div className="app-container admin-screen">
       <div className="admin-header">
@@ -77,12 +94,26 @@ function Admin() {
                 </tr>
               ) : (
                 results.map((item, index) => (
-                  <tr key={item.id}>
+                  <tr key={item.id} style={{ opacity: item.hidden ? 0.6 : 1 }}>
                     <td>#{index + 1}</td>
-                    <td>{item.name}</td>
+                    <td>{item.name} {item.hidden && <span style={{fontSize: '0.8rem', color: '#FF9800', marginLeft: '8px'}}>(Oculto)</span>}</td>
                     <td><strong>{item.score}</strong></td>
                     <td>{new Date(item.created_at).toLocaleString('pt-BR')}</td>
-                    <td>
+                    <td style={{ display: 'flex', gap: '8px', justifyContent: 'center' }}>
+                      <button 
+                        onClick={() => handleToggleHide(item.id, item.hidden)}
+                        style={{
+                          background: item.hidden ? '#4CAF50' : '#FF9800',
+                          color: 'white',
+                          border: 'none',
+                          padding: '0.5rem 1rem',
+                          borderRadius: '6px',
+                          cursor: 'pointer',
+                          fontWeight: 'bold',
+                        }}
+                      >
+                        {item.hidden ? "Mostrar" : "Ocultar"}
+                      </button>
                       <button 
                         onClick={() => handleDelete(item.id)}
                         disabled={deletingId === item.id}
