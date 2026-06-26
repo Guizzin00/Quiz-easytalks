@@ -49,12 +49,12 @@ function Quiz() {
     const savedScore = safeStorage.getItem('quiz_score');
     const savedName = safeStorage.getItem('quiz_name');
     const savedId = safeStorage.getItem('quiz_id');
-    
+
     // Se existe pontuação salva, vamos checar no banco se o Admin excluiu
     if (savedScore !== null) {
       try {
         let query = supabase.from('quiz_results').select('id');
-        
+
         if (savedId) {
           query = query.eq('id', savedId);
         } else if (savedName) {
@@ -66,9 +66,9 @@ function Quiz() {
 
         if (savedId || savedName) {
           const { data, error } = await query.limit(1);
-            
+
           if (error) throw error;
-          
+
           // Se retornar vazio, significa que o Admin excluiu do painel!
           if (data && data.length === 0) {
             safeStorage.removeItem('quiz_score');
@@ -90,24 +90,24 @@ function Quiz() {
       setHasStarted(true);
       setAlreadyPlayed(true);
     }
-    
+
     setCheckingStatus(false);
   };
 
   const handleAnswer = async (optionScore) => {
     const newAnswers = { ...answers, [currentQuestionIndex]: optionScore };
     setAnswers(newAnswers);
-    
+
     if (currentQuestionIndex < questions.length - 1) {
       setCurrentQuestionIndex(currentQuestionIndex + 1);
     } else {
       const totalScore = Object.values(newAnswers).reduce((acc, curr) => acc + curr, 0);
       setFinalScore(totalScore);
       setShowResult(true);
-      
+
       safeStorage.setItem('quiz_score', totalScore);
       safeStorage.setItem('quiz_name', playerName);
-      
+
       await saveResult(totalScore);
     }
   };
@@ -126,7 +126,7 @@ function Quiz() {
         .from('quiz_results')
         .insert([{ name: playerName, score: scoreToSave }])
         .select();
-        
+
       if (error) throw error;
 
       if (data && data.length > 0) {
@@ -142,7 +142,7 @@ function Quiz() {
   if (checkingStatus) {
     return (
       <div className="app-container start-screen">
-        <h1 className="title-logo" style={{fontSize: '2rem'}}>Verificando status...</h1>
+        <h1 className="title-logo" style={{ fontSize: '2rem' }}>Verificando status...</h1>
       </div>
     );
   }
@@ -150,19 +150,19 @@ function Quiz() {
   if (!hasStarted) {
     return (
       <div className="app-container start-screen">
-        <h1 className="title-logo">Quiz: Qual é o seu potencial, MARKETIRO?</h1>
+        <h1 className="title-logo">Quiz: Qual é o seu potencial, MARKETEIRO?</h1>
         <p className="subtitle">Descubra como você interage com boas experiências e com sua equipe!</p>
-        
+
         <div className="input-container">
-          <input 
-            type="text" 
-            className="name-input" 
-            placeholder="Digite seu nome..." 
+          <input
+            type="text"
+            className="name-input"
+            placeholder="Digite seu nome..."
             value={playerName}
             onChange={(e) => setPlayerName(e.target.value.toUpperCase())}
           />
-          <button 
-            className="start-btn" 
+          <button
+            className="start-btn"
             onClick={() => setHasStarted(true)}
             disabled={!playerName.trim()}
           >
@@ -181,10 +181,10 @@ function Quiz() {
           {isSaving ? (
             <p className="result-message">Salvando seu resultado...</p>
           ) : (
-            <p className="result-message" style={{fontSize: '5rem', margin: 0}}>{finalScore}</p>
+            <p className="result-message" style={{ fontSize: '5rem', margin: 0 }}>{finalScore}</p>
           )}
         </div>
-        
+
         {alreadyPlayed && !isSaving && (
           <p style={{ marginTop: '2rem', opacity: 0.8, fontSize: '1.2rem', fontWeight: 700 }}>
             Você já completou o quiz. Seus resultados foram salvos!
@@ -204,16 +204,16 @@ function Quiz() {
         </div>
         <div className="score-display">Jogador: {playerName}</div>
       </div>
-      
+
       <div className="question-section">
         <h2 className="question-text">{currentQuestion.text}</h2>
       </div>
 
       <div className="options-grid">
         {currentQuestion.options.map((option, index) => (
-          <button 
-            key={index} 
-            className="option-btn" 
+          <button
+            key={index}
+            className="option-btn"
             style={{ backgroundColor: option.color }}
             onClick={() => handleAnswer(option.score)}
           >
@@ -225,7 +225,7 @@ function Quiz() {
 
       {currentQuestionIndex > 0 && (
         <div style={{ display: 'flex', justifyContent: 'center', marginTop: '2rem' }}>
-          <button 
+          <button
             onClick={handleBack}
             style={{
               background: 'rgba(255,255,255,0.2)',
