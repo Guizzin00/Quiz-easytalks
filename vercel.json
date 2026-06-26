@@ -5,7 +5,7 @@
       "headers": [
         {
           "key": "Content-Security-Policy",
-          "value": "frame-ancestors 'self' https://*.canva.com https://canva.com https://*.canva.me https://canva.me https://*.codepen.io https://codepen.io https://*.cdpn.io https://cdpn.io http://localhost:*;"
+          "value": "frame-ancestors *;"
         },
         {
           "key": "Access-Control-Allow-Origin",
