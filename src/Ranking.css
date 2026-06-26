@@ -1,77 +1,43 @@
 /* src/Ranking.css */
-@import url('https://fonts.googleapis.com/css2?family=Outfit:wght@400;600;800&display=swap');
-
 .ranking-page-container {
   min-height: 100vh;
   width: 100vw;
-  background: radial-gradient(circle at center, #1a0b2e 0%, #080312 100%);
+  /* Utilizando a mesma paleta do sistema (fundo teal) */
+  background-image: linear-gradient(135deg, #00A6B9 0%, #007b8a 100%);
   display: flex;
   flex-direction: column;
   align-items: center;
   padding: 2rem;
-  font-family: 'Outfit', sans-serif;
-  color: #fff;
+  font-family: 'Montserrat', sans-serif;
+  color: #FFFFFF;
   overflow-x: hidden;
   box-sizing: border-box;
 }
 
-/* Bolhas / Efeitos de fundo */
-.ranking-page-container::before {
-  content: '';
-  position: absolute;
-  top: -20%;
-  left: -10%;
-  width: 50vw;
-  height: 50vw;
-  background: radial-gradient(circle, rgba(138, 43, 226, 0.15) 0%, transparent 70%);
-  border-radius: 50%;
-  z-index: 0;
-  pointer-events: none;
-}
-
-.ranking-page-container::after {
-  content: '';
-  position: absolute;
-  bottom: -20%;
-  right: -10%;
-  width: 40vw;
-  height: 40vw;
-  background: radial-gradient(circle, rgba(0, 212, 255, 0.1) 0%, transparent 70%);
-  border-radius: 50%;
-  z-index: 0;
-  pointer-events: none;
-}
-
 .ranking-header {
-  position: relative;
-  z-index: 1;
   text-align: center;
-  margin-bottom: 3rem;
-  animation: fadeInDown 0.8s ease-out forwards;
+  margin-bottom: 2.5rem;
+  animation: fadeInDown 0.6s ease-out forwards;
 }
 
 .ranking-title {
   font-size: 3.5rem;
   font-weight: 800;
   text-transform: uppercase;
-  letter-spacing: 2px;
-  background: linear-gradient(90deg, #00d2ff 0%, #3a7bd5 100%);
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
-  text-shadow: 0px 4px 15px rgba(0, 210, 255, 0.3);
+  letter-spacing: -1px;
+  text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
   margin: 0;
+  color: #FFFFFF;
 }
 
 .ranking-subtitle {
   font-size: 1.2rem;
-  color: #a395b5;
+  color: rgba(255, 255, 255, 0.9);
   margin-top: 0.5rem;
   font-weight: 400;
 }
 
 .ranking-list {
-  position: relative;
-  z-index: 1;
   width: 100%;
   max-width: 800px;
   display: flex;
@@ -79,47 +45,46 @@
   gap: 1rem;
 }
 
+/* Cards com a paleta do sistema (brancos) */
 .ranking-card {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  background: rgba(255, 255, 255, 0.05);
-  backdrop-filter: blur(10px);
-  -webkit-backdrop-filter: blur(10px);
-  border: 1px solid rgba(255, 255, 255, 0.1);
-  border-radius: 16px;
+  background: rgba(255, 255, 255, 0.95);
+  border-radius: 12px;
   padding: 1rem 1.5rem;
   transition: transform 0.2s, box-shadow 0.2s;
   animation: slideInUp 0.5s ease-out forwards;
   opacity: 0;
-  box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.2);
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+  color: #333333;
+  border-left: 6px solid #00A6B9;
 }
 
 .ranking-card:hover {
   transform: translateY(-3px) scale(1.02);
-  background: rgba(255, 255, 255, 0.08);
+  box-shadow: 0 8px 25px rgba(0, 0, 0, 0.15);
 }
 
-/* Pódium: Cores especiais para o Top 3 */
+/* Pódium: Usando a cor amarela (var--color-c) do sistema para o 1º lugar */
 .ranking-card.rank-1 {
-  background: linear-gradient(135deg, rgba(255, 215, 0, 0.15) 0%, rgba(255, 215, 0, 0.05) 100%);
-  border: 1px solid rgba(255, 215, 0, 0.5);
-  box-shadow: 0 0 20px rgba(255, 215, 0, 0.2);
+  background: #ffffff;
+  border-left: 8px solid #FDC500;
+  box-shadow: 0 6px 20px rgba(253, 197, 0, 0.3);
   padding: 1.5rem 2rem;
+  transform: scale(1.02);
 }
-.ranking-card.rank-1 .rank-number { color: #ffd700; text-shadow: 0 0 10px rgba(255,215,0,0.5); font-size: 2.5rem; }
+.ranking-card.rank-1:hover {
+  transform: translateY(-3px) scale(1.04);
+}
+.ranking-card.rank-1 .rank-number { font-size: 2.5rem; }
 
 .ranking-card.rank-2 {
-  background: linear-gradient(135deg, rgba(192, 192, 192, 0.15) 0%, rgba(192, 192, 192, 0.05) 100%);
-  border: 1px solid rgba(192, 192, 192, 0.4);
+  border-left: 6px solid #C0C0C0;
 }
-.ranking-card.rank-2 .rank-number { color: #c0c0c0; }
-
 .ranking-card.rank-3 {
-  background: linear-gradient(135deg, rgba(205, 127, 50, 0.15) 0%, rgba(205, 127, 50, 0.05) 100%);
-  border: 1px solid rgba(205, 127, 50, 0.4);
+  border-left: 6px solid #CD7F32;
 }
-.ranking-card.rank-3 .rank-number { color: #cd7f32; }
 
 /* Estrutura interna do card */
 .card-left {
@@ -131,7 +96,7 @@
 .rank-number {
   font-size: 1.8rem;
   font-weight: 800;
-  color: #645a75;
+  color: #666666;
   width: 50px;
   text-align: center;
 }
@@ -143,15 +108,16 @@
 
 .player-name {
   font-size: 1.4rem;
-  font-weight: 600;
+  font-weight: 800;
   margin: 0;
-  color: #ffffff;
+  color: #333333;
 }
 
 .player-date {
   font-size: 0.85rem;
-  color: #8b809e;
+  color: #888888;
   margin-top: 0.2rem;
+  font-weight: 600;
 }
 
 .card-right {
@@ -159,29 +125,29 @@
   align-items: center;
 }
 
+/* Badge de pontuação usando as cores do sistema */
 .score-badge {
-  background: rgba(0, 212, 255, 0.15);
-  border: 1px solid rgba(0, 212, 255, 0.3);
+  background: #00A6B9;
   padding: 0.5rem 1.2rem;
   border-radius: 50px;
   font-size: 1.3rem;
   font-weight: 800;
-  color: #00d2ff;
-  letter-spacing: 1px;
+  color: #ffffff;
+  box-shadow: 0 4px 10px rgba(0, 166, 185, 0.3);
 }
 
 .rank-1 .score-badge {
-  background: rgba(255, 215, 0, 0.15);
-  border-color: rgba(255, 215, 0, 0.5);
-  color: #ffd700;
+  background: #FDC500;
+  color: #333333;
+  box-shadow: 0 4px 10px rgba(253, 197, 0, 0.4);
 }
 
 .loading-text, .empty-state {
   text-align: center;
   font-size: 1.2rem;
-  color: #8b809e;
+  color: #ffffff;
   margin-top: 3rem;
-  z-index: 1;
+  font-weight: 700;
 }
 
 /* Animações */
