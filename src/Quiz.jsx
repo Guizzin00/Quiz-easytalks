@@ -4,6 +4,32 @@ import { supabase } from './supabase';
 
 const SHAPES = ["▲", "◆", "●"];
 
+// Utilitário para evitar travamento da aplicação quando rodando dentro de um iframe com restrição de cookies/armazenamento de terceiros
+const safeStorage = {
+  getItem: (key) => {
+    try {
+      return localStorage.getItem(key);
+    } catch (e) {
+      console.warn("Acesso ao localStorage bloqueado pelo navegador:", e);
+      return null;
+    }
+  },
+  setItem: (key, value) => {
+    try {
+      localStorage.setItem(key, value);
+    } catch (e) {
+      console.warn("Escrita no localStorage bloqueada pelo navegador:", e);
+    }
+  },
+  removeItem: (key) => {
+    try {
+      localStorage.removeItem(key);
+    } catch (e) {
+      console.warn("Remoção no localStorage bloqueada pelo navegador:", e);
+    }
+  }
+};
+
 function Quiz() {
   const [currentQuestionIndex, setCurrentQuestionIndex] = useState(0);
   const [answers, setAnswers] = useState({});
@@ -20,9 +46,9 @@ function Quiz() {
   }, []);
 
   const checkIfCanPlay = async () => {
-    const savedScore = localStorage.getItem('quiz_score');
-    const savedName = localStorage.getItem('quiz_name');
-    const savedId = localStorage.getItem('quiz_id');
+    const savedScore = safeStorage.getItem('quiz_score');
+    const savedName = safeStorage.getItem('quiz_name');
+    const savedId = safeStorage.getItem('quiz_id');
     
     // Se existe pontuação salva, vamos checar no banco se o Admin excluiu
     if (savedScore !== null) {
@@ -45,9 +71,9 @@ function Quiz() {
           
           // Se retornar vazio, significa que o Admin excluiu do painel!
           if (data && data.length === 0) {
-            localStorage.removeItem('quiz_score');
-            localStorage.removeItem('quiz_name');
-            localStorage.removeItem('quiz_id');
+            safeStorage.removeItem('quiz_score');
+            safeStorage.removeItem('quiz_name');
+            safeStorage.removeItem('quiz_id');
             setCheckingStatus(false);
             return;
           }
@@ -79,8 +105,8 @@ function Quiz() {
       setFinalScore(totalScore);
       setShowResult(true);
       
-      localStorage.setItem('quiz_score', totalScore);
-      localStorage.setItem('quiz_name', playerName);
+      safeStorage.setItem('quiz_score', totalScore);
+      safeStorage.setItem('quiz_name', playerName);
       
       await saveResult(totalScore);
     }
@@ -104,7 +130,7 @@ function Quiz() {
       if (error) throw error;
 
       if (data && data.length > 0) {
-        localStorage.setItem('quiz_id', data[0].id);
+        safeStorage.setItem('quiz_id', data[0].id);
       }
     } catch (error) {
       console.error("Erro ao salvar resultado:", error);

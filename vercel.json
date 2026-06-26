@@ -1,7 +1,22 @@
 {
-  "rewrites": [
+  "headers": [
     {
       "source": "/(.*)",
+      "headers": [
+        {
+          "key": "Content-Security-Policy",
+          "value": "frame-ancestors 'self' https://*.canva.com https://canva.com https://*.canva.me https://canva.me http://localhost:*;"
+        },
+        {
+          "key": "Access-Control-Allow-Origin",
+          "value": "*"
+        }
+      ]
+    }
+  ],
+  "rewrites": [
+    {
+      "source": "/((?!api/).*)",
       "destination": "/index.html"
     }
   ]
