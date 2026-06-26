@@ -52,12 +52,17 @@ function Admin() {
   const handleToggleHide = async (id, currentHiddenStatus) => {
     const newStatus = !currentHiddenStatus;
     try {
-      const { error } = await supabase
+      const { data, error } = await supabase
         .from('quiz_results')
         .update({ hidden: newStatus })
-        .eq('id', id);
+        .eq('id', id)
+        .select();
         
       if (error) throw error;
+
+      if (!data || data.length === 0) {
+        throw new Error("Permissão Negada. O Supabase bloqueou a atualização.");
+      }
       
       setResults(results.map(item => item.id === id ? { ...item, hidden: newStatus } : item));
     } catch (error) {
