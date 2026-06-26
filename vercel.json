@@ -16,6 +16,10 @@
   ],
   "rewrites": [
     {
+      "source": "/ranking",
+      "destination": "/api/render-html?path=/ranking"
+    },
+    {
       "source": "/((?!api/).*)",
       "destination": "/index.html"
     }

@@ -29,11 +29,16 @@ export default function handler(req, res) {
     targetUrl = defaultBaseUrl;
   }
 
+  let title = 'Quiz EasyTalks';
+  if (targetUrl.includes('/ranking')) {
+    title = 'Quiz EasyTalks - Ranking em Tempo Real';
+  }
+
   // Resposta estruturada conforme especificação oEmbed (tipo 'rich')
   res.status(200).json({
     type: 'rich',
     version: '1.0',
-    title: 'Quiz EasyTalks',
+    title: title,
     provider_name: 'Quiz EasyTalks',
     provider_url: defaultBaseUrl,
     width: 800,
