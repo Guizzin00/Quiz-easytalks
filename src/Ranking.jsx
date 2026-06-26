@@ -8,6 +8,17 @@ function Ranking() {
 
   useEffect(() => {
     fetchResults();
+
+    const subscription = supabase
+      .channel('quiz_results_changes')
+      .on('postgres_changes', { event: '*', schema: 'public', table: 'quiz_results' }, () => {
+        fetchResults();
+      })
+      .subscribe();
+
+    return () => {
+      supabase.removeChannel(subscription);
+    };
   }, []);
 
   const fetchResults = async () => {
