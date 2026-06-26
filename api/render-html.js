@@ -25,9 +25,17 @@ export default function handler(req, res) {
     const protocol = req.headers['x-forwarded-proto'] || 'https';
     const baseUrl = `${protocol}://${host}`;
 
-    // Obtém o path original passado pela regra de rewrite
+    // Obtém o path original passado pela regra de rewrite e adicionais
     const originalPath = req.query.path || '/ranking';
-    const canonicalUrl = `${baseUrl}${originalPath}`;
+    
+    // Repassa os outros query parameters (ex. cache buster) para o link oEmbed
+    const urlObj = new URL(originalPath, baseUrl);
+    for (const [key, val] of Object.entries(req.query)) {
+      if (key !== 'path') {
+        urlObj.searchParams.set(key, val);
+      }
+    }
+    const canonicalUrl = urlObj.toString();
     const oembedUrl = `${baseUrl}/api/oembed?url=${encodeURIComponent(canonicalUrl)}`;
 
     // Substitui o link do oEmbed para usar uma URL absoluta com o parâmetro 'url'
