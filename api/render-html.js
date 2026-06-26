@@ -51,14 +51,14 @@ export default function handler(req, res) {
 
     // Se for a rota de ranking, personaliza o título e as metatags para melhorar a exibição no Canva/redes
     if (originalPath === '/ranking') {
-      html = html.replace('<title>Quiz EasyTalks</title>', '<title>Quiz EasyTalks - Ranking em Tempo Real</title>');
+      html = html.replaceAll('<title>Quiz EasyTalks</title>', '<title>Quiz EasyTalks - Ranking em Tempo Real</title>');
       
-      html = html.replace(
+      html = html.replaceAll(
         'content="Quiz: Qual é o seu potencial, MARKETIRO?"',
         'content="Quiz EasyTalks - Ranking em Tempo Real"'
       );
       
-      html = html.replace(
+      html = html.replaceAll(
         'content="Descubra como você interage com boas experiências e com sua equipe!"',
         'content="Acompanhe o ranking do quiz em tempo real!"'
       );
